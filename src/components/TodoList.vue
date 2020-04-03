@@ -8,8 +8,8 @@
       @keyup.enter="addTodo"
     >
     <transition-group
-      enter-active-class="animated fadeInUp"
-      leave-active-class="animated fadeOutDown">
+      enter-active-class="animated fadeIn"
+      leave-active-class="animated fadeOut">
       <div
         v-for="(todo, index) in todosFiltered"
         :key="todo.id"
@@ -23,46 +23,34 @@
       </div>
     </transition-group>
     <div class="check-all-container">
-      <div>
-        <label>
-          <input
-            type="checkbox" 
-            :checked="!anyRemaining"
-            @change="checkAllTodos"
-          >
-            Check All
-        </label>
-      </div>
-      <div>{{ remaining }} items left</div>
+      <TodoItemsCheckAll :anyRemaining="anyRemaining"/>
+      <TodoItemsRemaining :remaining="remaining"/>
     </div>
     <div class="check-all-container">
-      <div>
-        <button :class="{ active: filter == 'all' }" @click="filter = 'all'">All</button>
-        <button :class="{ active: filter == 'active' }" @click="filter = 'active'">Active</button>
-        <button :class="{ active: filter == 'completed' }" @click="filter = 'completed'">Completed</button>
-      </div>
-      <div>
-        <transition name="fade">
-          <button
-            class="clear-completed-btn"
-            v-if="showClearCompletedButton"
-            @click="clearCompleted"
-          >
-            Clear Completed
-          </button>
-        </transition>
-      </div>
+      <TodoFilter />
+      <TodoClearCompletedButton :showClearCompletedButton="showClearCompletedButton"/>
     </div>
   </div>
 </template>
 
 <script>
+import TodoItemsRemaining from './TodoItemsRemaining';
+import TodoItemsCheckAll from './TodoItemsCheckAll';
+import TodoFilter from './TodoFilter';
+import TodoClearCompletedButton from './TodoClearCompletedButton';
+
 export default {
+  components: {
+    TodoItemsCheckAll,
+    TodoItemsRemaining,
+    TodoFilter,
+    TodoClearCompletedButton
+  },
   data() {
     return {
       newTodo: '',
-      idForTodo: 3,
       filter: 'all',
+      idForTodo: 3,
       todos: [
         {
           'id': 1,
@@ -76,6 +64,16 @@ export default {
         }
       ]
     }
+  },
+  created() {
+    eventBus.$on('checkAllChanged', (checked) => this.checkAllTodos(checked));
+    eventBus.$on('filterChanged', (filter) => this.filter = filter);
+    eventBus.$on('clearCompletedTodos', () => this.clearCompleted());
+  },
+  beforeDestroy() {
+    eventBus.$off('checkAllChanged', (checked) => this.checkAllTodos(checked));
+    eventBus.$off('filterChanged', (filter) => this.filter = filter);
+    eventBus.$off('clearCompletedTodos', () => this.clearCompleted());
   },
   computed: {
     remaining() {
@@ -141,13 +139,13 @@ $outline2: #beedff;
 .todo-input {
   width: 100%;
   padding: 10px 14px;
+  margin: 0 5px;
   font-size: 18px;
   margin-bottom: 16px;
   border: 1px solid whitesmoke;
 
   &:focus {
     outline-color: $outline1;
-    border: none
   }
 }
 
@@ -193,6 +191,8 @@ $outline2: #beedff;
   border-top: 1px solid $dark;
   padding-top: 14px;
   margin-bottom: 14px;
+  margin-right: 5px;
+  margin-left: 5px;
   color: $dark;
 }
 
@@ -228,12 +228,5 @@ button {
     background: $danger;
     color: white;
   }
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .2s;
-}
-.fade-enter, .fade-leave-to {
-  opacity: 0;
 }
 </style>
