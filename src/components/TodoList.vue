@@ -63,7 +63,7 @@ export default {
         return
       }
 
-      this.$store.commit('addTodo', {
+      this.$store.dispatch('addTodo', {
         id: this.idForTodo,
         title: this.newTodo
       })
@@ -72,7 +72,7 @@ export default {
       this.idForTodo++;
     },
     removeTodo(index) {
-      this.$store.commit('deleteTodo', index);
+      this.$store.dispatch('deleteTodo', index);
     }
   }
 }
