@@ -8,8 +8,8 @@
       @keyup.enter="addTodo"
     >
     <transition-group
-      enter-active-class="animated fadeIn"
-      leave-active-class="animated fadeOut">
+      enter-active-class="animated fadeInUp"
+      leave-active-class="animated fadeOutDown">
       <div
         v-for="(todo, index) in todosFiltered"
         :key="todo.id"
