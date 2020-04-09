@@ -1,7 +1,13 @@
 # todo-client
 
+## Clone project
+```
+git clone https://github.com/svkylmz/todo-with-vuex.git
+```
+
 ## Project setup
 ```
+Go to project directory and then run npm command on the bottom line to install dependecies:
 npm install
 ```
 
