@@ -9,12 +9,12 @@ export const store = new Vuex.Store({
         todos: [
             {
               'id': 1,
-              'title': 'Finish vue task',
+              'title': 'todo item 1',
               'completed': false,
             },
             {
               'id': 2,
-              'title': 'Huawei work project',
+              'title': 'todo item 2',
               'completed': false
             }
         ]
