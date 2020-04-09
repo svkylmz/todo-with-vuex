@@ -1,4 +1,4 @@
-# client-side
+# todo-client
 
 ## Project setup
 ```
